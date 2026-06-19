@@ -1,0 +1,6 @@
+bash
+
+mkdir -p /home/claude/financial-educator/src/{components,hooks,types,utils,styles} && echo "done"
+Saída
+
+done
