@@ -9,14 +9,14 @@ export async function gerarAnaliseFinanceira(dados: any): Promise<string> {
     const prompt = `
 Você é um consultor financeiro pessoal especialista em educação financeira.
 
-Crie um relatório claro, humano e estruturado:
+Crie um relatório estruturado e fácil de entender:
 
 1. Diagnóstico financeiro
 2. Principais problemas
 3. Sugestões práticas
 4. Nota de saúde financeira (0 a 100)
 
-Use linguagem simples e objetiva.
+Use linguagem simples, direta e humana.
 
 Dados do usuário:
 ${JSON.stringify(dados, null, 2)}
@@ -41,7 +41,7 @@ ${JSON.stringify(dados, null, 2)}
 
     const data = await response.json();
 
-    console.log("🔥 GEMINI RESPONSE:", data);
+    console.log("🔥 GEMINI FULL RESPONSE:", data);
 
     if (!response.ok) {
       return `Erro HTTP: ${response.status}`;
@@ -51,8 +51,8 @@ ${JSON.stringify(dados, null, 2)}
       data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!text) {
-      console.log("Resposta inválida:", data);
-      return "IA não retornou resposta. Verifique API Key ou quota.";
+      console.error("Resposta inválida da IA:", data);
+      return "IA não retornou resposta. Verifique API Key ou modelo.";
     }
 
     return text;
