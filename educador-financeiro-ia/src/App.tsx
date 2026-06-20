@@ -11,163 +11,227 @@ function App() {
     moradia: "",
     transporte: "",
     alimentacao: "",
-    lazer: ""
+    lazer: "",
+    objetivo: "",
+    valorObjetivo: "",
+    prazo: ""
   });
 
+  const container = {
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #6B73FF 0%, #000DFF 100%)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px"
+  };
+
+  const card = {
+    width: "100%",
+    maxWidth: "520px",
+    background: "#fff",
+    borderRadius: "20px",
+    padding: "24px",
+    boxShadow: "0 20px 60px rgba(0,0,0,0.25)"
+  };
+
+  const input = {
+    width: "100%",
+    padding: "12px",
+    marginBottom: "12px",
+    borderRadius: "10px",
+    border: "1px solid #ddd",
+    outline: "none"
+  };
+
+  const button = {
+    padding: "10px 14px",
+    borderRadius: "10px",
+    border: "none",
+    cursor: "pointer",
+    fontWeight: 600
+  };
+
+  const primary = {
+    ...button,
+    background: "#4F46E5",
+    color: "#fff"
+  };
+
+  const secondary = {
+    ...button,
+    background: "#E5E7EB",
+    color: "#111"
+  };
+
   return (
-    <div>
-      <h1>Educador Financeiro IA</h1>
+    <div style={container}>
+      <div style={card}>
+        <h2 style={{ marginBottom: 5 }}>💰 Educador Financeiro IA</h2>
+        <p style={{ marginTop: 0, color: "#666" }}>
+          Organize sua vida financeira em poucos passos
+        </p>
 
-      {/* Etapa 1 */}
-      {step === 1 && (
-        <div>
-          <h2>Etapa 1 - Dados Pessoais</h2>
+        {/* STEP 1 */}
+        {step === 1 && (
+          <>
+            <h3>Dados pessoais</h3>
 
-          <input
-            type="text"
-            placeholder="Nome"
-            value={formData.nome}
-            onChange={(e) =>
-              setFormData({ ...formData, nome: e.target.value })
-            }
-            style={{ display: "block", marginBottom: "10px" }}
-          />
+            <input
+              style={input}
+              placeholder="Nome"
+              value={formData.nome}
+              onChange={(e) =>
+                setFormData({ ...formData, nome: e.target.value })
+              }
+            />
 
-          <input
-            type="number"
-            placeholder="Idade"
-            value={formData.idade}
-            onChange={(e) =>
-              setFormData({ ...formData, idade: e.target.value })
-            }
-            style={{ display: "block" }}
-          />
-        </div>
-      )}
+            <input
+              style={input}
+              placeholder="Idade"
+              type="number"
+              value={formData.idade}
+              onChange={(e) =>
+                setFormData({ ...formData, idade: e.target.value })
+              }
+            />
+          </>
+        )}
 
-      {/* Etapa 2 */}
-      {step === 2 && (
-        <div>
-          <h2>Etapa 2 - Receitas</h2>
+        {/* STEP 2 */}
+        {step === 2 && (
+          <>
+            <h3>Receitas</h3>
 
-          <input
-            type="number"
-            placeholder="Salário"
-            value={formData.salario}
-            onChange={(e) =>
-              setFormData({ ...formData, salario: e.target.value })
-            }
-            style={{ display: "block", marginBottom: "10px" }}
-          />
+            <input
+              style={input}
+              placeholder="Salário"
+              type="number"
+              value={formData.salario}
+              onChange={(e) =>
+                setFormData({ ...formData, salario: e.target.value })
+              }
+            />
 
-          <input
-            type="number"
-            placeholder="Renda Extra"
-            value={formData.rendaExtra}
-            onChange={(e) =>
-              setFormData({ ...formData, rendaExtra: e.target.value })
-            }
-            style={{ display: "block" }}
-          />
-        </div>
-      )}
+            <input
+              style={input}
+              placeholder="Renda extra"
+              type="number"
+              value={formData.rendaExtra}
+              onChange={(e) =>
+                setFormData({ ...formData, rendaExtra: e.target.value })
+              }
+            />
+          </>
+        )}
 
-      {/* Etapa 3 */}
-      {step === 3 && (
-        <div>
-          <h2>Etapa 3 - Despesas</h2>
+        {/* STEP 3 */}
+        {step === 3 && (
+          <>
+            <h3>Despesas</h3>
 
-          <input
-            type="number"
-            placeholder="Moradia"
-            value={formData.moradia}
-            onChange={(e) =>
-              setFormData({ ...formData, moradia: e.target.value })
-            }
-            style={{ display: "block", marginBottom: "10px" }}
-          />
+            <input style={input} placeholder="Moradia"
+              value={formData.moradia}
+              onChange={(e) =>
+                setFormData({ ...formData, moradia: e.target.value })
+              }
+            />
 
-          <input
-            type="number"
-            placeholder="Transporte"
-            value={formData.transporte}
-            onChange={(e) =>
-              setFormData({ ...formData, transporte: e.target.value })
-            }
-            style={{ display: "block", marginBottom: "10px" }}
-          />
+            <input style={input} placeholder="Transporte"
+              value={formData.transporte}
+              onChange={(e) =>
+                setFormData({ ...formData, transporte: e.target.value })
+              }
+            />
 
-          <input
-            type="number"
-            placeholder="Alimentação"
-            value={formData.alimentacao}
-            onChange={(e) =>
-              setFormData({ ...formData, alimentacao: e.target.value })
-            }
-            style={{ display: "block", marginBottom: "10px" }}
-          />
+            <input style={input} placeholder="Alimentação"
+              value={formData.alimentacao}
+              onChange={(e) =>
+                setFormData({ ...formData, alimentacao: e.target.value })
+              }
+            />
 
-          <input
-            type="number"
-            placeholder="Lazer"
-            value={formData.lazer}
-            onChange={(e) =>
-              setFormData({ ...formData, lazer: e.target.value })
-            }
-            style={{ display: "block" }}
-          />
-        </div>
-      )}
+            <input style={input} placeholder="Lazer"
+              value={formData.lazer}
+              onChange={(e) =>
+                setFormData({ ...formData, lazer: e.target.value })
+              }
+            />
+          </>
+        )}
 
-      {/* Etapa 4 */}
-      {step === 4 && (
-        <div>
-          <h2>Etapa 4 - Objetivos</h2>
-        </div>
-      )}
+        {/* STEP 4 */}
+        {step === 4 && (
+          <>
+            <h3>Objetivo financeiro</h3>
 
-      {/* Etapa 5 */}
-      {step === 5 && (
-        <div>
-          <h2>Etapa 5 - Análise IA</h2>
+            <input
+              style={input}
+              placeholder="Ex: Comprar uma casa"
+              value={formData.objetivo}
+              onChange={(e) =>
+                setFormData({ ...formData, objetivo: e.target.value })
+              }
+            />
 
-          <button
-            onClick={async () => {
-              try {
-                const { gerarAnaliseFinanceira } = await import("./services/gemini");
+            <input
+              style={input}
+              placeholder="Valor desejado"
+              type="number"
+              value={formData.valorObjetivo}
+              onChange={(e) =>
+                setFormData({ ...formData, valorObjetivo: e.target.value })
+              }
+            />
+
+            <input
+              style={input}
+              placeholder="Prazo (meses)"
+              type="number"
+              value={formData.prazo}
+              onChange={(e) =>
+                setFormData({ ...formData, prazo: e.target.value })
+              }
+            />
+          </>
+        )}
+
+        {/* STEP 5 */}
+        {step === 5 && (
+          <>
+            <h3>Análise IA</h3>
+
+            <button
+              style={primary}
+              onClick={async () => {
+                const { gerarAnaliseFinanceira } = await import(
+                  "./services/gemini"
+                );
 
                 const resultado = await gerarAnaliseFinanceira(formData);
 
-                console.log("Resposta da IA:", resultado);
-
                 alert(resultado);
-              } catch (error) {
-                console.error(error);
-                alert("Erro ao gerar análise da IA");
-              }
-            }}
-          >
-            Gerar análise com IA
-          </button>
+              }}
+            >
+              Gerar análise inteligente
+            </button>
+          </>
+        )}
+
+        {/* NAVIGATION */}
+        <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
+          {step > 1 && (
+            <button style={secondary} onClick={() => setStep(step - 1)}>
+              Voltar
+            </button>
+          )}
+
+          {step < 5 && (
+            <button style={primary} onClick={() => setStep(step + 1)}>
+              Próximo
+            </button>
+          )}
         </div>
-      )}
-
-      {/* Botões */}
-      <div style={{ marginTop: "20px" }}>
-        {step > 1 && (
-          <button onClick={() => setStep(step - 1)}>
-            Voltar
-          </button>
-        )}
-
-        {step < 5 && (
-          <button
-            onClick={() => setStep(step + 1)}
-            style={{ marginLeft: "10px" }}
-          >
-            Próximo
-          </button>
-        )}
       </div>
     </div>
   );
