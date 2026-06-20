@@ -1,27 +1,22 @@
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-type FormDataType = {
-  nome: string;
-  idade: string;
-  salario: string;
-  rendaExtra: string;
-  moradia: string;
-  transporte: string;
-  alimentacao: string;
-  lazer: string;
-};
-
-export async function gerarAnaliseFinanceira(dados: FormDataType): Promise<string> {
+export async function gerarAnaliseFinanceira(dados: any): Promise<string> {
   try {
+    if (!API_KEY) {
+      return "Erro: API Key não configurada (VITE_GEMINI_API_KEY).";
+    }
+
     const prompt = `
-Você é um consultor financeiro pessoal.
+Você é um consultor financeiro pessoal especialista em educação financeira.
 
-Crie um relatório estruturado e fácil de entender com:
+Crie um relatório claro, humano e estruturado:
 
-- Diagnóstico financeiro
-- Principais problemas
-- Sugestões práticas de melhoria
-- Nota de saúde financeira (0 a 100)
+1. Diagnóstico financeiro
+2. Principais problemas
+3. Sugestões práticas
+4. Nota de saúde financeira (0 a 100)
+
+Use linguagem simples e objetiva.
 
 Dados do usuário:
 ${JSON.stringify(dados, null, 2)}
@@ -46,13 +41,23 @@ ${JSON.stringify(dados, null, 2)}
 
     const data = await response.json();
 
-    if (!data?.candidates?.length) {
-      return "Erro: IA não retornou resposta.";
+    console.log("🔥 GEMINI RESPONSE:", data);
+
+    if (!response.ok) {
+      return `Erro HTTP: ${response.status}`;
     }
 
-    return data.candidates[0].content.parts[0].text;
+    const text =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!text) {
+      console.log("Resposta inválida:", data);
+      return "IA não retornou resposta. Verifique API Key ou quota.";
+    }
+
+    return text;
   } catch (error) {
     console.error("Erro Gemini:", error);
-    return "Erro ao gerar análise financeira.";
+    return "Erro ao conectar com a IA.";
   }
 }
