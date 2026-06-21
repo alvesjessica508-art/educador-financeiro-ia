@@ -27,7 +27,7 @@ Dados do usuário:
 ${JSON.stringify(dados, null, 2)}
 `;
 
-  const MAX_RETRIES = 3;
+  const MAX_RETRIES = 5;
 
   for (let tentativa = 0; tentativa < MAX_RETRIES; tentativa++) {
     try {
@@ -55,7 +55,7 @@ ${JSON.stringify(dados, null, 2)}
 
       // Rate limit — espera e tenta de novo
       if (response.status === 429) {
-        const waitMs = Math.pow(2, tentativa) * 1500; // 1.5s, 3s, 6s
+        const waitMs = Math.pow(2, tentativa) * 5000; // 5s, 10s, 20s, 40s, 80s
         console.warn(`⚠️ Rate limit atingido. Aguardando ${waitMs}ms antes de tentar novamente...`);
         await sleep(waitMs);
         continue;
