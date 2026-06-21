@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function App() {
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -67,12 +68,11 @@ function App() {
   return (
     <div style={container}>
       <div style={card}>
-        <h2 style={{ marginBottom: 5 }}>💰 Educador Financeiro IA</h2>
-        <p style={{ marginTop: 0, color: "#666" }}>
+        <h2>💰 Educador Financeiro IA</h2>
+        <p style={{ color: "#666" }}>
           Organize sua vida financeira em poucos passos
         </p>
 
-        {/* STEP 1 */}
         {step === 1 && (
           <>
             <h3>Dados pessoais</h3>
@@ -98,7 +98,6 @@ function App() {
           </>
         )}
 
-        {/* STEP 2 */}
         {step === 2 && (
           <>
             <h3>Receitas</h3>
@@ -125,7 +124,6 @@ function App() {
           </>
         )}
 
-        {/* STEP 3 */}
         {step === 3 && (
           <>
             <h3>Despesas</h3>
@@ -160,14 +158,13 @@ function App() {
           </>
         )}
 
-        {/* STEP 4 */}
         {step === 4 && (
           <>
             <h3>Objetivo financeiro</h3>
 
             <input
               style={input}
-              placeholder="Ex: Comprar uma casa"
+              placeholder="Objetivo"
               value={formData.objetivo}
               onChange={(e) =>
                 setFormData({ ...formData, objetivo: e.target.value })
@@ -186,7 +183,7 @@ function App() {
 
             <input
               style={input}
-              placeholder="Prazo (meses)"
+              placeholder="Prazo"
               type="number"
               value={formData.prazo}
               onChange={(e) =>
@@ -196,29 +193,40 @@ function App() {
           </>
         )}
 
-        {/* STEP 5 */}
         {step === 5 && (
           <>
             <h3>Análise IA</h3>
 
             <button
-              style={primary}
+              style={{
+                ...primary,
+                opacity: loading ? 0.6 : 1,
+                cursor: loading ? "not-allowed" : "pointer"
+              }}
+              disabled={loading}
               onClick={async () => {
-                const { gerarAnaliseFinanceira } = await import(
-                  "./services/gemini"
-                );
+                if (loading) return;
 
-                const resultado = await gerarAnaliseFinanceira(formData);
+                setLoading(true);
 
-                alert(resultado);
+                try {
+                  const { gerarAnaliseFinanceira } = await import(
+                    "./services/gemini"
+                  );
+
+                  const resultado = await gerarAnaliseFinanceira(formData);
+
+                  alert(resultado);
+                } finally {
+                  setLoading(false);
+                }
               }}
             >
-              Gerar análise inteligente
+              {loading ? "Gerando análise..." : "Gerar análise inteligente"}
             </button>
           </>
         )}
 
-        {/* NAVIGATION */}
         <div style={{ marginTop: 20, display: "flex", gap: 10 }}>
           {step > 1 && (
             <button style={secondary} onClick={() => setStep(step - 1)}>

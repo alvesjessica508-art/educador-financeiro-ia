@@ -1,5 +1,9 @@
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
+if (!API_KEY) {
+  console.warn("VITE_GEMINI_API_KEY não encontrada");
+}
+
 export async function gerarAnaliseFinanceira(dados: any): Promise<string> {
   try {
     if (!API_KEY) {
@@ -7,21 +11,23 @@ export async function gerarAnaliseFinanceira(dados: any): Promise<string> {
     }
 
     const prompt = `
-Você é um consultor financeiro pessoal.
+Você é um consultor financeiro pessoal especialista.
 
-Crie um relatório estruturado:
+Crie um relatório estruturado e direto:
 
-1. Diagnóstico financeiro  
-2. Problemas encontrados  
-3. Sugestões práticas  
+1. Diagnóstico financeiro
+2. Problemas encontrados
+3. Sugestões práticas
 4. Nota de saúde financeira (0 a 100)
 
-Dados:
+Seja claro, objetivo e humano.
+
+Dados do usuário:
 ${JSON.stringify(dados, null, 2)}
 `;
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
       {
         method: "POST",
         headers: {
@@ -30,6 +36,7 @@ ${JSON.stringify(dados, null, 2)}
         body: JSON.stringify({
           contents: [
             {
+              role: "user",
               parts: [{ text: prompt }],
             },
           ],
@@ -39,21 +46,24 @@ ${JSON.stringify(dados, null, 2)}
 
     const data = await response.json();
 
-    console.log("GEMINI RESPONSE:", data);
+    console.log("🔥 GEMINI RAW RESPONSE:", data);
 
     if (!response.ok) {
-      return `Erro HTTP: ${response.status} - ${data?.error?.message}`;
+      return `Erro HTTP ${response.status}: ${
+        data?.error?.message || "Erro desconhecido"
+      }`;
     }
 
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!text) {
-      return "IA não retornou resposta.";
+      return "IA não retornou resposta (estrutura inválida).";
     }
 
     return text;
-  } catch (error) {
-    console.error(error);
-    return "Erro ao conectar com a IA.";
+  } catch (error: any) {
+    console.error("Erro Gemini:", error);
+    return `Erro ao conectar com IA: ${error?.message || "desconhecido"}`;
   }
 }
