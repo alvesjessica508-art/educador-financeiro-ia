@@ -3,6 +3,7 @@ import { useState } from "react";
 function App() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [resultado, setResultado] = useState("");
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -76,24 +77,18 @@ function App() {
         {step === 1 && (
           <>
             <h3>Dados pessoais</h3>
-
             <input
               style={input}
               placeholder="Nome"
               value={formData.nome}
-              onChange={(e) =>
-                setFormData({ ...formData, nome: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
             />
-
             <input
               style={input}
               placeholder="Idade"
               type="number"
               value={formData.idade}
-              onChange={(e) =>
-                setFormData({ ...formData, idade: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, idade: e.target.value })}
             />
           </>
         )}
@@ -101,25 +96,19 @@ function App() {
         {step === 2 && (
           <>
             <h3>Receitas</h3>
-
             <input
               style={input}
               placeholder="Salário"
               type="number"
               value={formData.salario}
-              onChange={(e) =>
-                setFormData({ ...formData, salario: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, salario: e.target.value })}
             />
-
             <input
               style={input}
               placeholder="Renda extra"
               type="number"
               value={formData.rendaExtra}
-              onChange={(e) =>
-                setFormData({ ...formData, rendaExtra: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, rendaExtra: e.target.value })}
             />
           </>
         )}
@@ -127,33 +116,21 @@ function App() {
         {step === 3 && (
           <>
             <h3>Despesas</h3>
-
             <input style={input} placeholder="Moradia"
               value={formData.moradia}
-              onChange={(e) =>
-                setFormData({ ...formData, moradia: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, moradia: e.target.value })}
             />
-
             <input style={input} placeholder="Transporte"
               value={formData.transporte}
-              onChange={(e) =>
-                setFormData({ ...formData, transporte: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, transporte: e.target.value })}
             />
-
             <input style={input} placeholder="Alimentação"
               value={formData.alimentacao}
-              onChange={(e) =>
-                setFormData({ ...formData, alimentacao: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, alimentacao: e.target.value })}
             />
-
             <input style={input} placeholder="Lazer"
               value={formData.lazer}
-              onChange={(e) =>
-                setFormData({ ...formData, lazer: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, lazer: e.target.value })}
             />
           </>
         )}
@@ -161,34 +138,25 @@ function App() {
         {step === 4 && (
           <>
             <h3>Objetivo financeiro</h3>
-
             <input
               style={input}
               placeholder="Objetivo"
               value={formData.objetivo}
-              onChange={(e) =>
-                setFormData({ ...formData, objetivo: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, objetivo: e.target.value })}
             />
-
             <input
               style={input}
               placeholder="Valor desejado"
               type="number"
               value={formData.valorObjetivo}
-              onChange={(e) =>
-                setFormData({ ...formData, valorObjetivo: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, valorObjetivo: e.target.value })}
             />
-
             <input
               style={input}
-              placeholder="Prazo"
+              placeholder="Prazo (meses)"
               type="number"
               value={formData.prazo}
-              onChange={(e) =>
-                setFormData({ ...formData, prazo: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, prazo: e.target.value })}
             />
           </>
         )}
@@ -206,17 +174,12 @@ function App() {
               disabled={loading}
               onClick={async () => {
                 if (loading) return;
-
                 setLoading(true);
-
+                setResultado("");
                 try {
-                  const { gerarAnaliseFinanceira } = await import(
-                    "./services/gemini"
-                  );
-
-                  const resultado = await gerarAnaliseFinanceira(formData);
-
-                  alert(resultado);
+                  const { gerarAnaliseFinanceira } = await import("./services/gemini");
+                  const texto = await gerarAnaliseFinanceira(formData);
+                  setResultado(texto);
                 } finally {
                   setLoading(false);
                 }
@@ -224,6 +187,31 @@ function App() {
             >
               {loading ? "Gerando análise..." : "Gerar análise inteligente"}
             </button>
+
+            {loading && (
+              <p style={{ marginTop: 16, color: "#6B73FF", fontWeight: 500 }}>
+                ⏳ Aguarde, a IA está analisando seus dados...
+              </p>
+            )}
+
+            {resultado && (
+              <div
+                style={{
+                  marginTop: 20,
+                  background: "#F0F4FF",
+                  borderRadius: 12,
+                  padding: 16,
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.7,
+                  color: "#1a1a2e",
+                  fontSize: 14,
+                  maxHeight: 400,
+                  overflowY: "auto"
+                }}
+              >
+                {resultado}
+              </div>
+            )}
           </>
         )}
 
@@ -233,7 +221,6 @@ function App() {
               Voltar
             </button>
           )}
-
           {step < 5 && (
             <button style={primary} onClick={() => setStep(step + 1)}>
               Próximo
